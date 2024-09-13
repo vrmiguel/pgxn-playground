@@ -42,7 +42,7 @@ impl RepologyClient {
         }
     }
 
-    async fn get_projects_for_os(
+    pub async fn get_projects_for_os(
         &self,
         project_name: &str,
         os: OperatingSystem,

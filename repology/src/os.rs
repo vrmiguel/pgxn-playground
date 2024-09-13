@@ -3,6 +3,24 @@ use std::{
     io::{BufRead, BufReader},
 };
 
+use anyhow::{bail, Context};
+
+use crate::api::RepologyClient;
+
+pub async fn install_command(package_name: &str, os: OperatingSystem) -> anyhow::Result<Vec<String>> {
+    let client = RepologyClient::new();
+
+    let packages = client.get_projects_for_os(package_name, os).await?;
+    let package_name = packages.into_iter().next().and_then(|package| package.srcname).with_context(|| "Binary name not found from Repology")?;
+
+    Ok(os
+        .package_managers()
+        .into_iter()
+        .map(|package_manager| package_manager.install(&package_name))
+        .collect())
+}
+
+#[derive(Debug, Clone, Copy)]
 pub enum OperatingSystem {
     Mac,
     Debian,
@@ -23,7 +41,7 @@ impl OperatingSystem {
 
     /// Detect the current operating system, if it's supported
     pub fn detect() -> Option<OperatingSystem> {
-        if cfg!(target_os="linux") {
+        if cfg!(target_os = "linux") {
             Self::detect_linux_distribution()
         } else if cfg!(windows) {
             Some(OperatingSystem::Windows)

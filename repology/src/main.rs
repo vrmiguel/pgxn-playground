@@ -1,17 +1,14 @@
 use api::RepologyClient;
+use os::{install_command, OperatingSystem};
 
 mod api;
 mod os;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    let rep_client = RepologyClient::new();
-
-    // Find the name of this project for this operating system and package manager
-    let projects = rep_client.get_projects("curl").await?;
-    dbg!(projects);
-
-    // Use `project` for installation ..
+    dbg!(install_command("ripgrep", OperatingSystem::Debian).await?);
+    dbg!(install_command("ripgrep", OperatingSystem::RedHat).await?);
+    dbg!(install_command("ripgrep", OperatingSystem::Mac).await?);
 
     Ok(())
 }
