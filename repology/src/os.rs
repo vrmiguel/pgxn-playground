@@ -23,7 +23,7 @@ impl OperatingSystem {
 
     /// Detect the current operating system, if it's supported
     pub fn detect() -> Option<OperatingSystem> {
-        if cfg!(linux) {
+        if cfg!(target_os="linux") {
             Self::detect_linux_distribution()
         } else if cfg!(windows) {
             Some(OperatingSystem::Windows)
