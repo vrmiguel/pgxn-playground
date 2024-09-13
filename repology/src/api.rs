@@ -47,7 +47,7 @@ impl RepologyClient {
         project_name: &str,
         os: OperatingSystem,
     ) -> anyhow::Result<Vec<Project>> {
-        let package_managers = current_os.package_managers();
+        let package_managers = os.package_managers();
 
         let url = format!(
             "{base_domain}/v1/project/{project_name}",

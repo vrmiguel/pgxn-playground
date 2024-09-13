@@ -1,6 +1,6 @@
 use std::{
     fs,
-    io::{self, BufRead, BufReader},
+    io::{BufRead, BufReader},
 };
 
 pub enum OperatingSystem {
